@@ -1,0 +1,58 @@
+package project;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.sql.*;
+
+public class admin_dashboard {
+    private JFrame frame;
+    private JTable table;
+
+    public admin_dashboard() {
+        frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setBounds(0, 0, 800, 600);
+        frame.setTitle("Admin Dashboard");
+
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel, BorderLayout.CENTER);
+        panel.setLayout(new BorderLayout());
+
+        table = new JTable();
+        JScrollPane scrollPane = new JScrollPane(table);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        loadChatLogs();
+
+        frame.setVisible(true);
+    }
+
+    private void loadChatLogs() {
+        String url = "jdbc:mysql://localhost:3306/users";
+        String user = "root";
+        String pass = "";
+
+        try (Connection conn = DriverManager.getConnection(url, user, pass);
+             Statement stmt = conn.createStatement()) {
+            String sql = "SELECT * FROM conversations";
+            ResultSet rs = stmt.executeQuery(sql);
+
+            String[] columnNames = {"ID", "Sender", "Message Type", "Content"};
+            DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String sender = rs.getString("sender");
+                String messageType = rs.getString("message_type");
+                String content = rs.getString("content");
+                Object[] data = {id, sender, messageType, content};
+                tableModel.addRow(data);
+            }
+
+            table.setModel(tableModel);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
