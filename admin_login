@@ -1,0 +1,61 @@
+package project;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class admin_login {
+    private JFrame frame;
+
+    public admin_login() {
+        frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setBounds(0, 0, 400, 300);
+        frame.setTitle("Admin Login");
+
+        JPanel panel = new JPanel();
+        frame.getContentPane().add(panel, BorderLayout.CENTER);
+        panel.setLayout(null);
+
+        JLabel lblUsername = new JLabel("Username:");
+        lblUsername.setBounds(50, 50, 100, 25);
+        panel.add(lblUsername);
+
+        JTextField txtUsername = new JTextField();
+        txtUsername.setBounds(150, 50, 150, 25);
+        panel.add(txtUsername);
+
+        JLabel lblPassword = new JLabel("Password:");
+        lblPassword.setBounds(50, 100, 100, 25);
+        panel.add(lblPassword);
+
+        JPasswordField txtPassword = new JPasswordField();
+        txtPassword.setBounds(150, 100, 150, 25);
+        panel.add(txtPassword);
+
+        JButton btnLogin = new JButton("Login");
+        btnLogin.setBounds(150, 150, 100, 25);
+        panel.add(btnLogin);
+
+        frame.setVisible(true);
+
+        btnLogin.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String username = txtUsername.getText();
+                String password = new String(txtPassword.getPassword());
+
+                if (username.equals("admin") && password.equals("admin123")) {
+                    new admin_dashboard();
+                    frame.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Invalid login credentials", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+        new admin_login();
+    }
+}
